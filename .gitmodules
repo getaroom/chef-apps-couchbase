@@ -1,0 +1,3 @@
+[submodule "chef-repo/cookbooks/couchbase"]
+	path = chef-repo/cookbooks/couchbase
+	url = git://github.com/getaroom/couchbase_cookbook.git
