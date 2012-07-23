@@ -1,0 +1,7 @@
+{
+  "id": "toad",
+  "owner": "toad",
+  "group": "toad",
+  "deploy_to": "/srv/toad",
+  "server_roles": ["client"]
+}

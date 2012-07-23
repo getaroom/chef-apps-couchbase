@@ -1,0 +1,10 @@
+{
+  "id": "princess",
+  "owner": "princess",
+  "group": "princess",
+  "deploy_to": "/srv/princess",
+  "server_roles": ["princess"],
+  "ingredients": {
+    "client": ["couchbase.yml"]
+  }
+}

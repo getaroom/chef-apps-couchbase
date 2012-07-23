@@ -1,4 +1,4 @@
-describe_recipe "apps-couchbase" do
+describe_recipe "apps-couchbase::buckets" do
   include MiniTest::Chef::Assertions
   include MiniTest::Chef::Context
   include MiniTest::Chef::Resources

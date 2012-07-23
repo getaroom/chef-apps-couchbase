@@ -11,4 +11,6 @@ depends "couchbase"
 supports "debian"
 supports "ubuntu"
 
-recipe "apps-couchbase", "Setup buckets from the apps data bag"
+recipe "apps-couchbase", "Configures Couchbase for apps."
+recipe "apps-couchbase::buckets", "Setup buckets from the apps data bag."
+recipe "apps-couchbase::yaml", "Generates a couchbase.yml file compatible with the couchbase-model gem."

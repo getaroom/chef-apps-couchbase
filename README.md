@@ -6,14 +6,31 @@ Tested on Ubuntu 12.04
 
 ## default
 
+Configures Couchbase for apps.
+
+## buckets
+
 Setup buckets from the apps data bag.
 
-### Example Data Bag Item
+## yaml
+
+Generates a couchbase.yml file compatible with the couchbase-model gem.
+
+# Example Data Bag Items
+
+## Apps
 
 ```json
 {
   "id": "pillowfight",
+  "owner": "pillowfight",
+  "group": "pillowfight",
+  "deploy_to": "/srv/pillowfight",
+  "server_roles": "pillowfight"
   "couchbase_role": ["couchbase_server"],
+  "ingredients": {
+    "pillowfight": ["couchbase.yml"]
+  },
   "couchbase_buckets": {
     "production": {
       "bucket": "pillowfight_production",

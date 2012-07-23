@@ -1,8 +1,10 @@
 cookbooks:
+- apps:
 - couchbase:
 - apps-couchbase:
 - chef_handler:
 - minitest-handler:
+- users:
 
 environments:
 - production:
@@ -14,8 +16,15 @@ roles:
 data bags:
 - apps:
   - pillowfight
+  - princess
+  - toad
+- users:
+  - johndoe
 
 nodes:
 - ec2 1:
-  - recipe[minitest-handler] role[client] role[server]
-  - --no-host-key-verify -x ubuntu -G default -I ami-3c994355 -f c1.medium -d ubuntu12.04-gems --region us-east-1 -E production
+  - recipe[minitest-handler] role[server]
+  - --no-host-key-verify -x ubuntu -G default -I ami-3c994355 -f c1.medium -d chef-full --region us-east-1 -E production
+- ec2 1:
+  - recipe[minitest-handler] role[client]
+  - --no-host-key-verify -x ubuntu -G default -I ami-3c994355 -f c1.medium -d chef-full --region us-east-1 -E production

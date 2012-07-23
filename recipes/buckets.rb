@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: apps-couchbase
-# Recipe:: default
+# Recipe:: buckets
 #
 # Copyright 2012, getaroom
 #
@@ -24,5 +24,23 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-include_recipe "apps-couchbase::buckets"
-include_recipe "apps-couchbase::yaml"
+search :apps do |app|
+  if (app.fetch("couchbase_role", []) & node.run_list.roles).any?
+    app['couchbase_buckets'].each do |environment, bucket|
+      couchbase_bucket bucket['bucket'] do
+        type bucket['type'] if bucket['type']
+
+        if bucket['memory_quota_mb']
+          memory_quota_mb bucket['memory_quota_mb']
+        else
+          memory_quota_percent bucket['memory_quota_percent']
+        end
+
+        replicas bucket['replicas'] if bucket.has_key? 'replicas'
+
+        username node['couchbase']['server']['username']
+        password node['couchbase']['server']['password']
+      end if environment.include? node.chef_environment
+    end
+  end
+end

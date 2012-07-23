@@ -1,10 +1,20 @@
 {
   "id": "pillowfight",
+  "owner": "pillowfight",
+  "group": "pillowfight",
+  "deploy_to": "/srv/pillowfight",
+  "server_roles": ["client"],
   "couchbase_role": ["server"],
+  "ingredients": {
+    "client": ["couchbase.yml"]
+  },
   "couchbase_buckets": {
     "production": {
       "bucket": "production_default",
-      "memory_quota_mb": 100
+      "memory_quota_mb": 100,
+      "default_ttl": 3600,
+      "key_prefix": "pillowfight/",
+      "quiet": true
     },
     "production_not_replicated": {
       "bucket": "production_not_replicated",

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: apps-couchbase
-# Recipe:: default
+# Recipe:: yaml
 #
 # Copyright 2012, getaroom
 #
@@ -24,5 +24,28 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-include_recipe "apps-couchbase::buckets"
-include_recipe "apps-couchbase::yaml"
+search :apps do |app|
+  if (app['server_roles'] & node.run_list.roles).any?
+    if app.fetch("ingredients", {}).any? { |role, ingredients| node.run_list.roles.include?(role) && ingredients.include?("couchbase.yml") }
+      buckets = app.fetch("couchbase_buckets", {}).select do |environment, bucket|
+        environment.include? node.chef_environment
+      end
+
+      roles_clause = app['couchbase_role'].map { |role| "role:#{role}" }.join(" OR ")
+
+      nodes = search(:node, "(#{roles_clause}) AND chef_environment:#{node.chef_environment}").map do |couchbase_node|
+        couchbase_node.attribute?("cloud") ? couchbase_node['cloud']['local_ipv4'] : couchbase_node['ipaddress']
+      end
+
+      template "#{app['deploy_to']}/shared/config/couchbase.yml" do
+        owner app['owner']
+        group app['group']
+        mode "660"
+        variables({
+          :buckets => buckets,
+          :nodes => nodes,
+        })
+      end
+    end
+  end
+end
