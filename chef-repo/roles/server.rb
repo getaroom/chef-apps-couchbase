@@ -12,6 +12,7 @@ default_attributes({
       "password" => "password",
     },
   },
+  "framework_environment" => "production",
   "minitest" => {
     "tests" => "apps-couchbase/buckets_test.rb",
   },

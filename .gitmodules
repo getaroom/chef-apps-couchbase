@@ -1,6 +1,6 @@
 [submodule "chef-repo/cookbooks/couchbase"]
 	path = chef-repo/cookbooks/couchbase
-	url = git://github.com/getaroom/couchbase_cookbook.git
+	url = git://github.com/getaroom/chef-couchbase.git
 [submodule "chef-repo/cookbooks/apps"]
 	path = chef-repo/cookbooks/apps
 	url = git://github.com/getaroom/chef-apps.git
@@ -9,4 +9,4 @@
 	url = git://github.com/opscode-cookbooks/users.git
 [submodule "chef-repo/cookbooks/minitest-handler"]
 	path = chef-repo/cookbooks/minitest-handler
-	url = git://github.com/cgriego/minitest-handler-cookbook.git
+	url = git://github.com/btm/minitest-handler-cookbook.git

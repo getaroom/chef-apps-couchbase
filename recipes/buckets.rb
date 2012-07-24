@@ -40,7 +40,7 @@ search :apps do |app|
 
         username node['couchbase']['server']['username']
         password node['couchbase']['server']['password']
-      end if environment.include? node.chef_environment
+      end if environment.include? node['framework_environment']
     end
   end
 end

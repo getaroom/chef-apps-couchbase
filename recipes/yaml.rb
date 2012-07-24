@@ -28,7 +28,7 @@ search :apps do |app|
   if (app['server_roles'] & node.run_list.roles).any?
     if app.fetch("ingredients", {}).any? { |role, ingredients| node.run_list.roles.include?(role) && ingredients.include?("couchbase.yml") }
       buckets = app.fetch("couchbase_buckets", {}).select do |environment, bucket|
-        environment.include? node.chef_environment
+        environment.include? node['framework_environment']
       end
 
       roles_clause = app['couchbase_role'].map { |role| "role:#{role}" }.join(" OR ")

@@ -8,6 +8,7 @@ run_list(
 )
 
 default_attributes({
+  "framework_environment" => "production",
   "minitest" => {
     "tests" => "apps-couchbase/yaml_test.rb",
   },
