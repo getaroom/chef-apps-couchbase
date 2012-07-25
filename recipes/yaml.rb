@@ -33,9 +33,12 @@ search :apps do |app|
 
       roles_clause = app['couchbase_role'].map { |role| "role:#{role}" }.join(" OR ")
 
-      nodes = search(:node, "(#{roles_clause}) AND chef_environment:#{node.chef_environment}").map do |couchbase_node|
+      nodes = search(:node, "(#{roles_clause}) AND chef_environment:#{node.chef_environment}")
+      nodes << node if (app['couchbase_role'] & node.run_list.roles).any? # node not indexed on first chef run
+
+      node_list = nodes.sort_by { |node| node.name }.reverse.map do |couchbase_node|
         couchbase_node.attribute?("cloud") ? couchbase_node['cloud']['local_ipv4'] : couchbase_node['ipaddress']
-      end
+      end.uniq
 
       template "#{app['deploy_to']}/shared/config/couchbase.yml" do
         owner app['owner']
@@ -43,7 +46,7 @@ search :apps do |app|
         mode "660"
         variables({
           :buckets => buckets,
-          :nodes => nodes,
+          :node_list => node_list,
         })
       end
     end

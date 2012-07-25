@@ -8,8 +8,12 @@ describe_recipe "apps-couchbase::yaml" do
     let(:app_group) { group "pillowfight" }
     let(:yml) { file "/srv/pillowfight/shared/config/couchbase.yml" }
     let(:stat) { File.stat(yml.path) }
-    let(:node_list) { Chef::Search::Query.new.search(:node, "role:server").first.map { |node| node['cloud']['local_ipv4'] } }
     let(:hostname) { node_list.first }
+
+    let :node_list do
+      nodes = Chef::Search::Query.new.search(:node, "role:server OR role:client").first + [node]
+      nodes.sort_by(&:name).reverse.map { |node| node['cloud']['local_ipv4'] }.uniq
+    end
 
     it "exists" do
       yml.must_exist

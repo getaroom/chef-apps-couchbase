@@ -3,7 +3,7 @@ description "Tests for Couchbase Server"
 
 run_list(
   "recipe[couchbase::server]",
-  "recipe[apps-couchbase]",
+  "recipe[apps-couchbase::buckets]",
 )
 
 default_attributes({

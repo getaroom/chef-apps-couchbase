@@ -4,7 +4,7 @@
   "group": "pillowfight",
   "deploy_to": "/srv/pillowfight",
   "server_roles": ["client"],
-  "couchbase_role": ["server"],
+  "couchbase_role": ["server", "client"],
   "ingredients": {
     "client": ["couchbase.yml"]
   },

@@ -4,7 +4,7 @@ description "Tests for Couchbase Client"
 run_list(
   "recipe[users::sysadmins]",
   "recipe[apps]",
-  "recipe[apps-couchbase]",
+  "recipe[apps-couchbase::yaml]",
 )
 
 default_attributes({
