@@ -8,7 +8,6 @@ describe_recipe "apps-couchbase::yaml" do
     let(:app_group) { group "pillowfight" }
     let(:yml) { file "/srv/pillowfight/shared/config/couchbase.yml" }
     let(:stat) { File.stat(yml.path) }
-    let(:hostname) { node_list.first }
 
     let :node_list do
       nodes = Chef::Search::Query.new.search(:node, "role:server OR role:client").first + [node]
@@ -28,11 +27,14 @@ describe_recipe "apps-couchbase::yaml" do
       assert_equal "660".oct, (stat.mode & 007777)
     end
 
+    it "does not serialize any special types" do
+      yml.wont_include "!"
+    end
+
     it "contains information about the production buckets" do
       expected_yaml = {
         "production" => {
           "bucket" => "production_default",
-          "hostname" => hostname,
           "node_list" => node_list,
           "default_ttl" => 3600,
           "key_prefix" => "pillowfight/",
@@ -40,22 +42,18 @@ describe_recipe "apps-couchbase::yaml" do
         },
         "production_not_replicated" => {
           "bucket" => "production_not_replicated",
-          "hostname" => hostname,
           "node_list" => node_list,
         },
         "production_replicated" => {
           "bucket" => "production_replicated",
-          "hostname" => hostname,
           "node_list" => node_list,
         },
         "production_percent" => {
           "bucket" => "production_percent",
-          "hostname" => hostname,
           "node_list" => node_list,
         },
         "production_memcached" => {
           "bucket" => "production_memcached",
-          "hostname" => hostname,
           "node_list" => node_list,
         },
       }

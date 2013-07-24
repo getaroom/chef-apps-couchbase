@@ -1,8 +1,0 @@
-<% @buckets.each do |environment, bucket| %>
-<%= environment %>:
-  hostname: <%= @node_list.first %>
-  node_list: [<%= @node_list.join(", ") %>]
-  <% bucket.reject { |key, value| %w(memory_quota_mb replicas memory_quota_percent type).include? key }.each do |key, value| %>
-  <%= key %>: <%= value.inspect %>
-  <% end %>
-<% end %>

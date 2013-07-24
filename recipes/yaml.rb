@@ -2,7 +2,7 @@
 # Cookbook Name:: apps-couchbase
 # Recipe:: yaml
 #
-# Copyright 2012, getaroom
+# Copyright 2012-2013, getaroom
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -36,18 +36,26 @@ search :apps do |app|
       nodes = search(:node, "(#{roles_clause}) AND chef_environment:#{node.chef_environment}")
       nodes << node if (app['couchbase_role'] & node.run_list.roles).any? # node not indexed on first chef run
 
-      node_list = nodes.sort_by { |node| node.name }.reverse.map do |couchbase_node|
+      node_list = nodes.sort_by do |couchbase_node|
+        same_zone = couchbase_node.attribute?("ec2") && node.attribute?("ec2") && couchbase_node['ec2']['placement_availability_zone'] == node['ec2']['placement_availability_zone'] ? 1 : 0
+        [same_zone, couchbase_node.name]
+      end.reverse.map do |couchbase_node|
         couchbase_node.attribute?("cloud") ? couchbase_node['cloud']['local_ipv4'] : couchbase_node['ipaddress']
       end.uniq
 
-      template "#{app['deploy_to']}/shared/config/couchbase.yml" do
+      config = {}
+
+      buckets.each do |environment, bucket|
+        config[environment] = bucket.to_hash.reject { |key, value| %w(memory_quota_mb replicas memory_quota_percent type).include? key }.merge({
+          "node_list" => node_list,
+        })
+      end
+
+      file "#{app['deploy_to']}/shared/config/couchbase.yml" do
         owner app['owner']
         group app['group']
         mode "660"
-        variables({
-          :buckets => buckets,
-          :node_list => node_list,
-        })
+        content config.to_yaml
       end
     end
   end

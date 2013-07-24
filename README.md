@@ -51,7 +51,7 @@ Generates a couchbase.yml file compatible with the couchbase-model gem.
 * Chris Griego (<cgriego@getaroom.com>)
 * Morgan Nelson (<mnelson@getaroom.com>)
 
-Copyright 2012, getaroom
+Copyright 2012-2013, getaroom
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

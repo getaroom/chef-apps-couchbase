@@ -1,4 +1,5 @@
 .bundle
-/.chef
+.ruby-gemset
 .rvmrc
+/.chef
 Gemfile.lock
