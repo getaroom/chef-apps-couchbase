@@ -25,8 +25,10 @@
 #
 
 search :apps do |app|
-  if (app.fetch("couchbase_role", []) & node.run_list.roles).any?
-    app['couchbase_buckets'].each do |environment, bucket|
+  app.fetch("couchbase_buckets", {}).each_pair do |environment, bucket|
+    couchbase_role = bucket.fetch("couchbase_role", app.fetch("couchbase_role", []))
+
+    if environment.include?(node['framework_environment']) && (couchbase_role & node.run_list.roles).any?
       couchbase_bucket bucket['bucket'] do
         type bucket['type'] if bucket['type']
 
@@ -40,7 +42,7 @@ search :apps do |app|
 
         username node['couchbase']['server']['username']
         password node['couchbase']['server']['password']
-      end if environment.include? node['framework_environment']
+      end
     end
   end
 end
